@@ -1,0 +1,62 @@
+#!markdown
+
+## Import Modules
+
+#!markdown
+
+Please make sure Modules Installed
+
+#!pwsh
+
+Import-Module -Name 'MSAL.PS'
+
+#!markdown
+
+## OAuth Access Token
+
+This section gets Access token from Microsoft
+
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+
+#!pwsh
+
+$MSAL = @{
+    TenantId = 'ddd8f7b5-8453-4ae8-b08a-2641f1c24d0b'
+    ClientId = '8b9df025-46d5-4c6e-9cb4-b1a9fa6ef3ab'
+    ClientSecret = ConvertTo-SecureString 'f0~8Q~SZG6tM.nqmO.wEtBv_kfredGUpjrs1RcJ8' -AsPlainText -Force
+}
+$Token = (Get-MsalToken @MSAL).AccessToken
+
+#!markdown
+
+## Access to Microsoft Graph
+
+Gets data from Microsoft Graph
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE
+" target="_blank"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
+
+#!pwsh
+
+$Graph = @{
+    Method = 'Get'
+    Uri = 'https://graph.microsoft.com/v1.0/groups'
+    Headers = @{Authorization = "Bearer $($Token)"}
+}
+
+$groups = (Invoke-RestMethod @Graph).value
+$groups | Select-Object displayName
+
+#!csharp
+
+#!share --from pwsh Token
+var http = new System.Net.Http.HttpClient();
+http.BaseAddress = new Uri("https://graph.microsoft.com/v1.0/");
+
+var groups = http.GetStringAsync("groups").Result;
